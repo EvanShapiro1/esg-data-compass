@@ -70,7 +70,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
-      <Navbar />
+      <Navbar activeTabProp="data" />
       <div className="flex-1 container mx-auto py-6 px-4 relative">
         <div className="grid gap-6 md:gap-8">
           <div className="grid md:grid-cols-2 gap-6">

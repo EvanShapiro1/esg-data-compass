@@ -1,17 +1,43 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { BarChart3, Database, FileText, Settings, User } from "lucide-react";
 
-const Navbar = () => {
-  const [activeTab, setActiveTab] = useState('data');
+interface NavbarProps {
+  activeTabProp?: string;
+}
+
+const Navbar = ({ activeTabProp }: NavbarProps) => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [activeTab, setActiveTab] = useState(activeTabProp || 'data');
+  
+  // Update active tab based on current route or prop
+  useEffect(() => {
+    if (activeTabProp) {
+      setActiveTab(activeTabProp);
+    } else {
+      const path = location.pathname;
+      if (path === '/') setActiveTab('data');
+      else if (path === '/reports') setActiveTab('reports');
+      else if (path === '/analytics') setActiveTab('analytics');
+      else if (path === '/settings') setActiveTab('settings');
+    }
+  }, [location, activeTabProp]);
   
   const navItems = [
-    { id: 'data', label: 'Data', icon: <Database size={16} /> },
-    { id: 'reports', label: 'Reports', icon: <FileText size={16} /> },
-    { id: 'analytics', label: 'Analytics', icon: <BarChart3 size={16} /> },
-    { id: 'settings', label: 'Settings', icon: <Settings size={16} /> }
+    { id: 'data', label: 'Data', icon: <Database size={16} />, path: '/' },
+    { id: 'reports', label: 'Reports', icon: <FileText size={16} />, path: '/reports' },
+    { id: 'analytics', label: 'Analytics', icon: <BarChart3 size={16} />, path: '/analytics' },
+    { id: 'settings', label: 'Settings', icon: <Settings size={16} />, path: '/settings' }
   ];
+
+  // Handle navigation
+  const handleTabChange = (tabId: string, path: string) => {
+    setActiveTab(tabId);
+    navigate(path);
+  };
 
   return (
     <header className="border-b border-border bg-background sticky top-0 z-10">
@@ -33,7 +59,7 @@ const Navbar = () => {
                     ? "text-primary" 
                     : "text-muted-foreground hover:text-foreground"
                 }`}
-                onClick={() => setActiveTab(item.id)}
+                onClick={() => handleTabChange(item.id, item.path)}
               >
                 {item.icon}
                 <span className="ml-2">{item.label}</span>
