@@ -8,7 +8,7 @@ interface ExportActionsProps {
   onShowAudit: () => void;
 }
 
-const ExportActions = ({ isComplete }: ExportActionsProps) => {
+const ExportActions = ({ isComplete, onShowAudit }: ExportActionsProps) => {
   if (!isComplete) {
     return null;
   }
@@ -28,7 +28,7 @@ const ExportActions = ({ isComplete }: ExportActionsProps) => {
           <span className="text-xs text-muted-foreground">Ready for submission</span>
         </Button>
         
-        <Button variant="outline" className="h-auto py-4 px-6 flex flex-col items-center justify-center space-y-2 text-center" onClick={(e) => onShowAudit()}>
+        <Button variant="outline" className="h-auto py-4 px-6 flex flex-col items-center justify-center space-y-2 text-center" onClick={() => onShowAudit()}>
           <FileJson className="h-6 w-6 mb-2" />
           <span className="text-sm font-medium">View Audit Trail</span>
           <span className="text-xs text-muted-foreground">View data sources</span>
