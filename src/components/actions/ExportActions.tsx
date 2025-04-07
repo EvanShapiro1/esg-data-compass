@@ -1,14 +1,14 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowUpRight, Download, Code, FileJson, FileOutput } from "lucide-react";
+import { ArrowUpRight, Download, Code, FileJson, FileOutput, BookOpen } from "lucide-react";
 
 interface ExportActionsProps {
   isComplete: boolean;
   onShowAudit: () => void;
 }
 
-const ExportActions = ({ isComplete, onShowAudit }: ExportActionsProps) => {
+const ExportActions = ({ isComplete }: ExportActionsProps) => {
   if (!isComplete) {
     return null;
   }
@@ -18,7 +18,7 @@ const ExportActions = ({ isComplete, onShowAudit }: ExportActionsProps) => {
       <CardHeader>
         <CardTitle>Export & Actions</CardTitle>
         <CardDescription>
-          Export your mapped data or access via API
+          Export your mapped data to frameworks or access via API
         </CardDescription>
       </CardHeader>
       <CardContent className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -28,7 +28,7 @@ const ExportActions = ({ isComplete, onShowAudit }: ExportActionsProps) => {
           <span className="text-xs text-muted-foreground">Ready for submission</span>
         </Button>
         
-        <Button variant="outline" className="h-auto py-4 px-6 flex flex-col items-center justify-center space-y-2 text-center" onClick={onShowAudit}>
+        <Button variant="outline" className="h-auto py-4 px-6 flex flex-col items-center justify-center space-y-2 text-center" onClick={(e) => onShowAudit()}>
           <FileJson className="h-6 w-6 mb-2" />
           <span className="text-sm font-medium">View Audit Trail</span>
           <span className="text-xs text-muted-foreground">View data sources</span>
@@ -38,6 +38,12 @@ const ExportActions = ({ isComplete, onShowAudit }: ExportActionsProps) => {
           <Download className="h-6 w-6 mb-2" />
           <span className="text-sm font-medium">Download Report</span>
           <span className="text-xs text-muted-foreground">PDF or Excel format</span>
+        </Button>
+        
+        <Button className="h-auto py-4 px-6 flex flex-col items-center justify-center space-y-2 text-center bg-purple-600 hover:bg-purple-700">
+          <BookOpen className="h-6 w-6 mb-2" />
+          <span className="text-sm font-medium">Export to SFDR</span>
+          <span className="text-xs text-muted-foreground">PAI indicators ready</span>
         </Button>
         
         <Button variant="outline" className="h-auto py-4 px-6 flex flex-col items-center justify-center space-y-2 text-center">

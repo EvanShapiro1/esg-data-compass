@@ -101,7 +101,7 @@ const DataUpload = ({ onUpload }: { onUpload: (files: File[]) => void }) => {
       <CardHeader>
         <CardTitle>Data Sources</CardTitle>
         <CardDescription>
-          Select ESG data sources to process for GRESB mapping
+          Select ESG data sources to process for GRESB and SFDR mapping
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -148,7 +148,7 @@ const DataUpload = ({ onUpload }: { onUpload: (files: File[]) => void }) => {
             <FileText className="h-4 w-4" />
             <AlertTitle>No data sources selected</AlertTitle>
             <AlertDescription>
-              Select one or more ESG data sources to begin the AI-powered GRESB mapping process.
+              Select one or more ESG data sources to begin the AI-powered GRESB and SFDR mapping process.
             </AlertDescription>
           </Alert>
         )}

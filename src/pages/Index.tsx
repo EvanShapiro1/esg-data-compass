@@ -50,7 +50,7 @@ const Index = () => {
           
           toast({
             title: "Processing complete",
-            description: "Your ESG data has been successfully mapped to GRESB schema",
+            description: "Your ESG data has been successfully mapped to GRESB and SFDR schemas",
             variant: "default",
           });
           
