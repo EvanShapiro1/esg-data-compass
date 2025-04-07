@@ -3,105 +3,95 @@ import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { FileSpreadsheet, FileText, Upload, X, FileCheck } from "lucide-react";
+import { FileSpreadsheet, FileText, Database, Cloud, Link, FileCheck, Plus } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
-const FileTypeIcon = ({ type }: { type: string }) => {
-  switch (type) {
-    case 'application/pdf':
-      return <FileText className="h-10 w-10 text-red-500" />;
-    case 'application/vnd.ms-excel':
-    case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
-    case 'text/csv':
-      return <FileSpreadsheet className="h-10 w-10 text-green-500" />;
-    default:
-      return <FileText className="h-10 w-10 text-gray-500" />;
-  }
-};
+interface DataSource {
+  id: string;
+  name: string;
+  type: 'file' | 'database' | 'cloud' | 'api';
+  description: string;
+  icon: React.ReactNode;
+}
 
 const DataUpload = ({ onUpload }: { onUpload: (files: File[]) => void }) => {
-  const [isDragging, setIsDragging] = useState(false);
-  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+  const [selectedSources, setSelectedSources] = useState<string[]>([]);
   const { toast } = useToast();
-
-  const handleDragEnter = (e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragging(true);
-  };
-
-  const handleDragLeave = (e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragging(false);
-  };
-
-  const handleDragOver = (e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (!isDragging) {
-      setIsDragging(true);
+  
+  const dataSources: DataSource[] = [
+    {
+      id: 'energy-consumption',
+      name: 'Energy Consumption Data',
+      type: 'database',
+      description: 'Annual energy usage by property and type',
+      icon: <Database className="h-10 w-10 text-blue-500" />
+    },
+    {
+      id: 'water-usage',
+      name: 'Water Usage Metrics',
+      type: 'cloud',
+      description: 'Quarterly water consumption records',
+      icon: <Cloud className="h-10 w-10 text-sky-500" />
+    },
+    {
+      id: 'waste-management',
+      name: 'Waste Management Reports',
+      type: 'file',
+      description: 'Waste disposal and recycling data',
+      icon: <FileSpreadsheet className="h-10 w-10 text-green-500" />
+    },
+    {
+      id: 'carbon-footprint',
+      name: 'Carbon Footprint Analysis',
+      type: 'api',
+      description: 'CO2 emissions by facility and activity',
+      icon: <Link className="h-10 w-10 text-purple-500" />
+    },
+    {
+      id: 'sustainability-reports',
+      name: 'Sustainability Reports',
+      type: 'file',
+      description: 'Annual sustainability PDF reports',
+      icon: <FileText className="h-10 w-10 text-red-500" />
     }
+  ];
+
+  const toggleSourceSelection = (id: string) => {
+    setSelectedSources(prev => {
+      if (prev.includes(id)) {
+        return prev.filter(sourceId => sourceId !== id);
+      } else {
+        return [...prev, id];
+      }
+    });
   };
 
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragging(false);
-    
-    const files = Array.from(e.dataTransfer.files);
-    handleFiles(files);
-  };
-
-  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      const files = Array.from(e.target.files);
-      handleFiles(files);
-    }
-  };
-
-  const handleFiles = (files: File[]) => {
-    // Filter for only allowed file types
-    const allowedTypes = [
-      'application/pdf',
-      'application/vnd.ms-excel',
-      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-      'text/csv'
-    ];
-    
-    const validFiles = files.filter(file => allowedTypes.includes(file.type));
-    const invalidFiles = files.filter(file => !allowedTypes.includes(file.type));
-    
-    if (invalidFiles.length > 0) {
+  const processSelectedSources = () => {
+    if (selectedSources.length === 0) {
       toast({
-        title: "Invalid file format",
-        description: "Only PDF, Excel, and CSV files are supported.",
+        title: "No sources selected",
+        description: "Please select at least one data source to process",
         variant: "destructive"
       });
+      return;
     }
     
-    if (validFiles.length > 0) {
-      setUploadedFiles(prev => [...prev, ...validFiles]);
-      toast({
-        title: "Files added",
-        description: `${validFiles.length} file(s) ready for processing`,
-        variant: "default"
-      });
-    }
-  };
-
-  const removeFile = (index: number) => {
-    setUploadedFiles(files => files.filter((_, i) => i !== index));
-  };
-
-  const processFiles = () => {
-    if (uploadedFiles.length === 0) return;
+    // Create mock files to maintain compatibility with existing code
+    const mockFiles = selectedSources.map(id => {
+      const source = dataSources.find(s => s.id === id)!;
+      // Create a mock File object
+      return new File(
+        ["mock content"], 
+        `${source.name}.${source.type === 'file' ? (source.name.includes('PDF') ? 'pdf' : 'xlsx') : 'json'}`,
+        { type: source.type === 'file' ? (source.name.includes('PDF') ? 'application/pdf' : 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') : 'application/json' }
+      );
+    });
     
-    onUpload(uploadedFiles);
+    onUpload(mockFiles);
     
     toast({
       title: "Processing started",
-      description: `${uploadedFiles.length} file(s) sent for AI analysis`,
+      description: `${selectedSources.length} data source(s) selected for analysis`,
       variant: "default"
     });
   };
@@ -109,85 +99,67 @@ const DataUpload = ({ onUpload }: { onUpload: (files: File[]) => void }) => {
   return (
     <Card className="w-full">
       <CardHeader>
-        <CardTitle>Data Upload</CardTitle>
+        <CardTitle>Data Sources</CardTitle>
         <CardDescription>
-          Upload your ESG data files for AI processing and GRESB mapping
+          Select ESG data sources to process for GRESB mapping
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div
-          className={`drag-drop-zone mb-4 ${isDragging ? 'active' : ''}`}
-          onDragEnter={handleDragEnter}
-          onDragLeave={handleDragLeave}
-          onDragOver={handleDragOver}
-          onDrop={handleDrop}
-        >
-          <input
-            id="file-upload"
-            type="file"
-            multiple
-            onChange={handleFileSelect}
-            className="sr-only"
-            accept=".pdf,.csv,.xls,.xlsx"
-          />
-          <label htmlFor="file-upload" className="cursor-pointer flex flex-col items-center">
-            <Upload className="h-12 w-12 text-gray-400 mb-3" />
-            <p className="text-lg font-medium mb-1">Drag files here or click to browse</p>
-            <p className="text-sm text-muted-foreground">
-              Upload PDFs, spreadsheets, or CSVs with your ESG data
-            </p>
-          </label>
+        <div className="space-y-4">
+          {dataSources.map(source => (
+            <div 
+              key={source.id}
+              className={`p-4 border rounded-md transition-all cursor-pointer flex items-center gap-4 hover:bg-muted/50 ${
+                selectedSources.includes(source.id) ? 'border-primary bg-muted/50' : 'border-border'
+              }`}
+              onClick={() => toggleSourceSelection(source.id)}
+            >
+              <div className="flex-shrink-0">
+                {source.icon}
+              </div>
+              <div className="flex-grow">
+                <h4 className="text-base font-medium">{source.name}</h4>
+                <p className="text-sm text-muted-foreground">{source.description}</p>
+              </div>
+              {selectedSources.includes(source.id) && (
+                <div className="flex-shrink-0 text-primary">
+                  <FileCheck className="h-6 w-6" />
+                </div>
+              )}
+            </div>
+          ))}
         </div>
 
-        {uploadedFiles.length > 0 && (
-          <div className="mt-6">
-            <h4 className="text-sm font-medium mb-2">Uploaded Files ({uploadedFiles.length})</h4>
-            <div className="space-y-2 max-h-64 overflow-y-auto px-1 mb-4">
-              {uploadedFiles.map((file, index) => (
-                <div 
-                  key={`${file.name}-${index}`} 
-                  className="flex items-center justify-between p-2 bg-muted rounded-md"
-                >
-                  <div className="flex items-center">
-                    <FileTypeIcon type={file.type} />
-                    <div className="ml-3">
-                      <p className="text-sm font-medium truncate max-w-[200px] sm:max-w-[300px]">{file.name}</p>
-                      <p className="text-xs text-muted-foreground">{(file.size / 1024).toFixed(1)} KB</p>
-                    </div>
-                  </div>
-                  <Button 
-                    variant="ghost" 
-                    size="icon" 
-                    onClick={() => removeFile(index)}
-                    className="text-muted-foreground hover:text-destructive"
-                  >
-                    <X size={16} />
-                  </Button>
-                </div>
-              ))}
-            </div>
-            
-            <div className="flex justify-end">
-              <Button 
-                onClick={processFiles}
-                className="flex items-center"
-              >
-                <FileCheck className="mr-2 h-4 w-4" />
-                Process Files
-              </Button>
-            </div>
+        {selectedSources.length > 0 ? (
+          <div className="mt-6 flex justify-between items-center">
+            <p className="text-sm font-medium">
+              {selectedSources.length} source{selectedSources.length !== 1 ? 's' : ''} selected
+            </p>
+            <Button 
+              onClick={processSelectedSources}
+              className="flex items-center"
+            >
+              <FileCheck className="mr-2 h-4 w-4" />
+              Process Sources
+            </Button>
           </div>
-        )}
-        
-        {uploadedFiles.length === 0 && (
+        ) : (
           <Alert className="mt-4">
             <FileText className="h-4 w-4" />
-            <AlertTitle>No files uploaded</AlertTitle>
+            <AlertTitle>No data sources selected</AlertTitle>
             <AlertDescription>
-              Upload your ESG data files to begin the AI-powered GRESB mapping process.
+              Select one or more ESG data sources to begin the AI-powered GRESB mapping process.
             </AlertDescription>
           </Alert>
         )}
+
+        <Button 
+          variant="outline" 
+          className="w-full mt-4 flex items-center justify-center text-muted-foreground"
+        >
+          <Plus className="mr-2 h-4 w-4" />
+          Add Custom Data Source
+        </Button>
       </CardContent>
     </Card>
   );
