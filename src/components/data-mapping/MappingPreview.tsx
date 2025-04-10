@@ -2,17 +2,34 @@
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Check, AlertCircle, HelpCircle, Search, Filter } from "lucide-react";
+import { Check, AlertCircle, HelpCircle, Search, Filter, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 
 interface MappingField {
   id: string;
-  sourceField: string;
-  sourceFile: string;
-  targetField: string;
-  targetCategory: string;
+  assetId: string;
+  assetName: string;
+  country: string;
+  buildingType: string;
+  month: string;
+  grossInternalArea: string;
+  electricityConsumption: string;
+  fuelConsumption: string;
+  districtHeating: string;
+  renewableEnergy: string;
+  scope1Emissions: string;
+  scope2Emissions: string;
+  waterConsumption: string;
+  waterSourceType: string;
+  totalWaste: string;
+  recycledWaste: string;
+  landfillWaste: string;
+  dataSource: string;
+  dataCoverage: string;
+  greenBuildingCert: string;
+  certificationExpiry: string;
   frameworkType: 'GRESB' | 'SFDR';
   status: 'success' | 'warning' | 'error';
   statusMessage?: string;
@@ -31,117 +48,83 @@ const MappingPreview = ({ isComplete }: MappingPreviewProps) => {
     // GRESB mappings
     {
       id: '1',
-      sourceField: 'Total Energy Consumption (kWh)',
-      sourceFile: 'energy_data_2024.xlsx',
-      targetField: 'Energy-Int',
-      targetCategory: 'Energy',
+      assetId: 'A001',
+      assetName: 'Office Tower A',
+      country: 'United Kingdom',
+      buildingType: 'Office',
+      month: 'Jan-2024',
+      grossInternalArea: '15,000',
+      electricityConsumption: '120,000',
+      fuelConsumption: '45,000',
+      districtHeating: '0',
+      renewableEnergy: '25,000',
+      scope1Emissions: '8.2',
+      scope2Emissions: '32.4',
+      waterConsumption: '1,200',
+      waterSourceType: 'Municipal',
+      totalWaste: '24.5',
+      recycledWaste: '18.2',
+      landfillWaste: '6.3',
+      dataSource: 'energy_data_2024.xlsx',
+      dataCoverage: '95%',
+      greenBuildingCert: 'BREEAM Excellent',
+      certificationExpiry: '2026-05-15',
       frameworkType: 'GRESB',
       status: 'success',
     },
     {
       id: '2',
-      sourceField: 'Scope 1 GHG Emissions',
-      sourceFile: 'emissions_report.pdf',
-      targetField: 'GHG-Dir-Abs',
-      targetCategory: 'GHG Emissions',
-      frameworkType: 'GRESB',
-      status: 'success',
-    },
-    {
-      id: '3',
-      sourceField: 'Water Usage (m³)',
-      sourceFile: 'water_consumption.csv',
-      targetField: 'Water-Abs',
-      targetCategory: 'Water',
-      frameworkType: 'GRESB',
-      status: 'success',
-    },
-    {
-      id: '4',
-      sourceField: 'Waste to Landfill (tonnes)',
-      sourceFile: 'waste_management.xlsx',
-      targetField: 'Waste-Abs',
-      targetCategory: 'Waste',
+      assetId: 'A002',
+      assetName: 'Retail Park B',
+      country: 'France',
+      buildingType: 'Retail',
+      month: 'Jan-2024',
+      grossInternalArea: '8,500',
+      electricityConsumption: '95,000',
+      fuelConsumption: '32,000',
+      districtHeating: '12,000',
+      renewableEnergy: '8,000',
+      scope1Emissions: '6.1',
+      scope2Emissions: '25.3',
+      waterConsumption: '950',
+      waterSourceType: 'Municipal',
+      totalWaste: '18.7',
+      recycledWaste: '12.5',
+      landfillWaste: '6.2',
+      dataSource: 'emissions_report.pdf',
+      dataCoverage: '92%',
+      greenBuildingCert: 'HQE',
+      certificationExpiry: '2025-08-22',
       frameworkType: 'GRESB',
       status: 'warning',
       statusMessage: 'Units need conversion',
     },
-    // SFDR mappings
     {
-      id: '5',
-      sourceField: 'Renewable Energy Production',
-      sourceFile: 'energy_data_2024.xlsx',
-      targetField: 'E.1 - Renewable Energy Share',
-      targetCategory: 'Climate and Environment',
+      id: '3',
+      assetId: 'A003',
+      assetName: 'Logistics Center C',
+      country: 'Germany',
+      buildingType: 'Industrial',
+      month: 'Jan-2024',
+      grossInternalArea: '22,000',
+      electricityConsumption: '180,000',
+      fuelConsumption: '55,000',
+      districtHeating: '25,000',
+      renewableEnergy: '32,000',
+      scope1Emissions: '10.5',
+      scope2Emissions: '42.7',
+      waterConsumption: '820',
+      waterSourceType: 'Groundwater',
+      totalWaste: '32.1',
+      recycledWaste: '25.8',
+      landfillWaste: '6.3',
+      dataSource: 'water_consumption.csv',
+      dataCoverage: '98%',
+      greenBuildingCert: 'DGNB Gold',
+      certificationExpiry: '2027-03-10',
       frameworkType: 'SFDR',
       status: 'error',
       statusMessage: 'Missing measurement unit',
-    },
-    {
-      id: '6',
-      sourceField: 'Building Certification Type',
-      sourceFile: 'certifications.pdf',
-      targetField: 'Cert-Tot',
-      targetCategory: 'Building Certifications',
-      frameworkType: 'GRESB',
-      status: 'success',
-    },
-    {
-      id: '7',
-      sourceField: 'Scope 2 GHG Emissions',
-      sourceFile: 'emissions_report.pdf',
-      targetField: 'GHG-Indir-Abs',
-      targetCategory: 'GHG Emissions',
-      frameworkType: 'GRESB',
-      status: 'warning',
-      statusMessage: 'Verification needed',
-    },
-    {
-      id: '8',
-      sourceField: 'Recycled Waste (tonnes)',
-      sourceFile: 'waste_management.xlsx',
-      targetField: 'Waste-Recycled',
-      targetCategory: 'Waste',
-      frameworkType: 'GRESB',
-      status: 'success',
-    },
-    // Additional SFDR mappings
-    {
-      id: '9',
-      sourceField: 'Gender Pay Gap',
-      sourceFile: 'hr_data.xlsx',
-      targetField: 'S.1 - Gender Pay Gap',
-      targetCategory: 'Social and Employee Matters',
-      frameworkType: 'SFDR',
-      status: 'success',
-    },
-    {
-      id: '10',
-      sourceField: 'Board Gender Diversity',
-      sourceFile: 'governance_report.pdf',
-      targetField: 'S.2 - Board Gender Diversity',
-      targetCategory: 'Social and Employee Matters',
-      frameworkType: 'SFDR',
-      status: 'success',
-    },
-    {
-      id: '11',
-      sourceField: 'Human Rights Policy',
-      sourceFile: 'policies.pdf',
-      targetField: 'S.9 - Human Rights Policy',
-      targetCategory: 'Social and Employee Matters',
-      frameworkType: 'SFDR',
-      status: 'warning',
-      statusMessage: 'Policy needs updating',
-    },
-    {
-      id: '12',
-      sourceField: 'Anti-corruption Measures',
-      sourceFile: 'governance_report.pdf',
-      targetField: 'G.2 - Anti-corruption and Anti-bribery',
-      targetCategory: 'Governance',
-      frameworkType: 'SFDR',
-      status: 'success',
     },
   ];
 
@@ -161,9 +144,10 @@ const MappingPreview = ({ isComplete }: MappingPreviewProps) => {
   const filteredMappings = mockMappings.filter(mapping => (
     (frameworkFilter === 'all' || mapping.frameworkType === frameworkFilter) &&
     (
-      mapping.sourceField.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      mapping.targetField.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      mapping.targetCategory.toLowerCase().includes(searchTerm.toLowerCase())
+      mapping.assetId.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      mapping.assetName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      mapping.country.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      mapping.buildingType.toLowerCase().includes(searchTerm.toLowerCase())
     )
   ));
 
@@ -217,29 +201,52 @@ const MappingPreview = ({ isComplete }: MappingPreviewProps) => {
                 {frameworkFilter === 'all' ? 'All Frameworks' : frameworkFilter}
               </Button>
             </div>
-            <div className="relative w-64">
-              <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-              <Input 
-                placeholder="Search fields..." 
-                className="pl-8"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
+            <div className="flex gap-2 items-center">
+              <Button variant="outline" size="sm" className="gap-1">
+                <Download className="h-3.5 w-3.5" />
+                Export Data
+              </Button>
+              <div className="relative w-64">
+                <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+                <Input 
+                  placeholder="Search fields..." 
+                  className="pl-8"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+              </div>
             </div>
           </div>
           
           <TabsContent value="all">
-            <div className="rounded-md border">
+            <div className="rounded-md border overflow-auto">
               <Table>
-                <TableHeader>
+                <TableHeader className="bg-muted/50">
                   <TableRow>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Source Field</TableHead>
-                    <TableHead>Source File</TableHead>
-                    <TableHead>Target Field</TableHead>
-                    <TableHead>Framework</TableHead>
-                    <TableHead>Category</TableHead>
-                    <TableHead className="text-right">Actions</TableHead>
+                    <TableHead className="whitespace-nowrap">Status</TableHead>
+                    <TableHead className="whitespace-nowrap">Asset ID</TableHead>
+                    <TableHead className="whitespace-nowrap">Asset Name</TableHead>
+                    <TableHead className="whitespace-nowrap">Country</TableHead>
+                    <TableHead className="whitespace-nowrap">Building Type</TableHead>
+                    <TableHead className="whitespace-nowrap">Month</TableHead>
+                    <TableHead className="whitespace-nowrap">Gross Internal Area (m²)</TableHead>
+                    <TableHead className="whitespace-nowrap">Electricity (kWh)</TableHead>
+                    <TableHead className="whitespace-nowrap">Fuel (kWh)</TableHead>
+                    <TableHead className="whitespace-nowrap">District Heating (kWh)</TableHead>
+                    <TableHead className="whitespace-nowrap">Renewable Energy (kWh)</TableHead>
+                    <TableHead className="whitespace-nowrap">Scope 1 (tCO₂e)</TableHead>
+                    <TableHead className="whitespace-nowrap">Scope 2 (tCO₂e)</TableHead>
+                    <TableHead className="whitespace-nowrap">Water (m³)</TableHead>
+                    <TableHead className="whitespace-nowrap">Water Source</TableHead>
+                    <TableHead className="whitespace-nowrap">Total Waste (tonnes)</TableHead>
+                    <TableHead className="whitespace-nowrap">Recycled Waste (tonnes)</TableHead>
+                    <TableHead className="whitespace-nowrap">Landfill Waste (tonnes)</TableHead>
+                    <TableHead className="whitespace-nowrap">Data Source</TableHead>
+                    <TableHead className="whitespace-nowrap">Coverage (%)</TableHead>
+                    <TableHead className="whitespace-nowrap">Green Building Cert.</TableHead>
+                    <TableHead className="whitespace-nowrap">Cert. Expiry Date</TableHead>
+                    <TableHead className="whitespace-nowrap">Framework</TableHead>
+                    <TableHead className="whitespace-nowrap text-right">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -251,12 +258,29 @@ const MappingPreview = ({ isComplete }: MappingPreviewProps) => {
                             {getStatusIcon(mapping.status)}
                           </div>
                         </TableCell>
-                        <TableCell className="font-medium">{mapping.sourceField}</TableCell>
-                        <TableCell className="text-muted-foreground text-sm">{mapping.sourceFile}</TableCell>
-                        <TableCell>{mapping.targetField}</TableCell>
+                        <TableCell className="whitespace-nowrap">{mapping.assetId}</TableCell>
+                        <TableCell className="whitespace-nowrap">{mapping.assetName}</TableCell>
+                        <TableCell className="whitespace-nowrap">{mapping.country}</TableCell>
+                        <TableCell className="whitespace-nowrap">{mapping.buildingType}</TableCell>
+                        <TableCell className="whitespace-nowrap">{mapping.month}</TableCell>
+                        <TableCell className="whitespace-nowrap">{mapping.grossInternalArea}</TableCell>
+                        <TableCell className="whitespace-nowrap">{mapping.electricityConsumption}</TableCell>
+                        <TableCell className="whitespace-nowrap">{mapping.fuelConsumption}</TableCell>
+                        <TableCell className="whitespace-nowrap">{mapping.districtHeating}</TableCell>
+                        <TableCell className="whitespace-nowrap">{mapping.renewableEnergy}</TableCell>
+                        <TableCell className="whitespace-nowrap">{mapping.scope1Emissions}</TableCell>
+                        <TableCell className="whitespace-nowrap">{mapping.scope2Emissions}</TableCell>
+                        <TableCell className="whitespace-nowrap">{mapping.waterConsumption}</TableCell>
+                        <TableCell className="whitespace-nowrap">{mapping.waterSourceType}</TableCell>
+                        <TableCell className="whitespace-nowrap">{mapping.totalWaste}</TableCell>
+                        <TableCell className="whitespace-nowrap">{mapping.recycledWaste}</TableCell>
+                        <TableCell className="whitespace-nowrap">{mapping.landfillWaste}</TableCell>
+                        <TableCell className="whitespace-nowrap">{mapping.dataSource}</TableCell>
+                        <TableCell className="whitespace-nowrap">{mapping.dataCoverage}</TableCell>
+                        <TableCell className="whitespace-nowrap">{mapping.greenBuildingCert}</TableCell>
+                        <TableCell className="whitespace-nowrap">{mapping.certificationExpiry}</TableCell>
                         <TableCell>{getFrameworkBadge(mapping.frameworkType)}</TableCell>
-                        <TableCell>{mapping.targetCategory}</TableCell>
-                        <TableCell className="text-right">
+                        <TableCell className="text-right whitespace-nowrap">
                           <Button variant="ghost" size="icon" className="h-8 w-8">
                             <HelpCircle className="h-4 w-4" />
                           </Button>
@@ -265,7 +289,7 @@ const MappingPreview = ({ isComplete }: MappingPreviewProps) => {
                     ))
                   ) : (
                     <TableRow>
-                      <TableCell colSpan={7} className="text-center py-4 text-muted-foreground">
+                      <TableCell colSpan={23} className="text-center py-4 text-muted-foreground">
                         No matching fields found
                       </TableCell>
                     </TableRow>
@@ -276,17 +300,34 @@ const MappingPreview = ({ isComplete }: MappingPreviewProps) => {
           </TabsContent>
           
           <TabsContent value="success">
-            <div className="rounded-md border">
+            <div className="rounded-md border overflow-auto">
               <Table>
-                <TableHeader>
+                <TableHeader className="bg-muted/50">
                   <TableRow>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Source Field</TableHead>
-                    <TableHead>Source File</TableHead>
-                    <TableHead>Target Field</TableHead>
-                    <TableHead>Framework</TableHead>
-                    <TableHead>Category</TableHead>
-                    <TableHead className="text-right">Actions</TableHead>
+                    <TableHead className="whitespace-nowrap">Status</TableHead>
+                    <TableHead className="whitespace-nowrap">Asset ID</TableHead>
+                    <TableHead className="whitespace-nowrap">Asset Name</TableHead>
+                    <TableHead className="whitespace-nowrap">Country</TableHead>
+                    <TableHead className="whitespace-nowrap">Building Type</TableHead>
+                    <TableHead className="whitespace-nowrap">Month</TableHead>
+                    <TableHead className="whitespace-nowrap">Gross Internal Area (m²)</TableHead>
+                    <TableHead className="whitespace-nowrap">Electricity (kWh)</TableHead>
+                    <TableHead className="whitespace-nowrap">Fuel (kWh)</TableHead>
+                    <TableHead className="whitespace-nowrap">District Heating (kWh)</TableHead>
+                    <TableHead className="whitespace-nowrap">Renewable Energy (kWh)</TableHead>
+                    <TableHead className="whitespace-nowrap">Scope 1 (tCO₂e)</TableHead>
+                    <TableHead className="whitespace-nowrap">Scope 2 (tCO₂e)</TableHead>
+                    <TableHead className="whitespace-nowrap">Water (m³)</TableHead>
+                    <TableHead className="whitespace-nowrap">Water Source</TableHead>
+                    <TableHead className="whitespace-nowrap">Total Waste (tonnes)</TableHead>
+                    <TableHead className="whitespace-nowrap">Recycled Waste (tonnes)</TableHead>
+                    <TableHead className="whitespace-nowrap">Landfill Waste (tonnes)</TableHead>
+                    <TableHead className="whitespace-nowrap">Data Source</TableHead>
+                    <TableHead className="whitespace-nowrap">Coverage (%)</TableHead>
+                    <TableHead className="whitespace-nowrap">Green Building Cert.</TableHead>
+                    <TableHead className="whitespace-nowrap">Cert. Expiry Date</TableHead>
+                    <TableHead className="whitespace-nowrap">Framework</TableHead>
+                    <TableHead className="whitespace-nowrap text-right">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -299,12 +340,29 @@ const MappingPreview = ({ isComplete }: MappingPreviewProps) => {
                             {getStatusIcon(mapping.status)}
                           </div>
                         </TableCell>
-                        <TableCell className="font-medium">{mapping.sourceField}</TableCell>
-                        <TableCell className="text-muted-foreground text-sm">{mapping.sourceFile}</TableCell>
-                        <TableCell>{mapping.targetField}</TableCell>
+                        <TableCell className="whitespace-nowrap">{mapping.assetId}</TableCell>
+                        <TableCell className="whitespace-nowrap">{mapping.assetName}</TableCell>
+                        <TableCell className="whitespace-nowrap">{mapping.country}</TableCell>
+                        <TableCell className="whitespace-nowrap">{mapping.buildingType}</TableCell>
+                        <TableCell className="whitespace-nowrap">{mapping.month}</TableCell>
+                        <TableCell className="whitespace-nowrap">{mapping.grossInternalArea}</TableCell>
+                        <TableCell className="whitespace-nowrap">{mapping.electricityConsumption}</TableCell>
+                        <TableCell className="whitespace-nowrap">{mapping.fuelConsumption}</TableCell>
+                        <TableCell className="whitespace-nowrap">{mapping.districtHeating}</TableCell>
+                        <TableCell className="whitespace-nowrap">{mapping.renewableEnergy}</TableCell>
+                        <TableCell className="whitespace-nowrap">{mapping.scope1Emissions}</TableCell>
+                        <TableCell className="whitespace-nowrap">{mapping.scope2Emissions}</TableCell>
+                        <TableCell className="whitespace-nowrap">{mapping.waterConsumption}</TableCell>
+                        <TableCell className="whitespace-nowrap">{mapping.waterSourceType}</TableCell>
+                        <TableCell className="whitespace-nowrap">{mapping.totalWaste}</TableCell>
+                        <TableCell className="whitespace-nowrap">{mapping.recycledWaste}</TableCell>
+                        <TableCell className="whitespace-nowrap">{mapping.landfillWaste}</TableCell>
+                        <TableCell className="whitespace-nowrap">{mapping.dataSource}</TableCell>
+                        <TableCell className="whitespace-nowrap">{mapping.dataCoverage}</TableCell>
+                        <TableCell className="whitespace-nowrap">{mapping.greenBuildingCert}</TableCell>
+                        <TableCell className="whitespace-nowrap">{mapping.certificationExpiry}</TableCell>
                         <TableCell>{getFrameworkBadge(mapping.frameworkType)}</TableCell>
-                        <TableCell>{mapping.targetCategory}</TableCell>
-                        <TableCell className="text-right">
+                        <TableCell className="text-right whitespace-nowrap">
                           <Button variant="ghost" size="icon" className="h-8 w-8">
                             <HelpCircle className="h-4 w-4" />
                           </Button>
@@ -317,17 +375,34 @@ const MappingPreview = ({ isComplete }: MappingPreviewProps) => {
           </TabsContent>
           
           <TabsContent value="issues">
-            <div className="rounded-md border">
+            <div className="rounded-md border overflow-auto">
               <Table>
-                <TableHeader>
+                <TableHeader className="bg-muted/50">
                   <TableRow>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Source Field</TableHead>
-                    <TableHead>Issue</TableHead>
-                    <TableHead>Target Field</TableHead>
-                    <TableHead>Framework</TableHead>
-                    <TableHead>Category</TableHead>
-                    <TableHead className="text-right">Actions</TableHead>
+                    <TableHead className="whitespace-nowrap">Status</TableHead>
+                    <TableHead className="whitespace-nowrap">Asset ID</TableHead>
+                    <TableHead className="whitespace-nowrap">Asset Name</TableHead>
+                    <TableHead className="whitespace-nowrap">Country</TableHead>
+                    <TableHead className="whitespace-nowrap">Issue</TableHead>
+                    <TableHead className="whitespace-nowrap">Month</TableHead>
+                    <TableHead className="whitespace-nowrap">Gross Internal Area (m²)</TableHead>
+                    <TableHead className="whitespace-nowrap">Electricity (kWh)</TableHead>
+                    <TableHead className="whitespace-nowrap">Fuel (kWh)</TableHead>
+                    <TableHead className="whitespace-nowrap">District Heating (kWh)</TableHead>
+                    <TableHead className="whitespace-nowrap">Renewable Energy (kWh)</TableHead>
+                    <TableHead className="whitespace-nowrap">Scope 1 (tCO₂e)</TableHead>
+                    <TableHead className="whitespace-nowrap">Scope 2 (tCO₂e)</TableHead>
+                    <TableHead className="whitespace-nowrap">Water (m³)</TableHead>
+                    <TableHead className="whitespace-nowrap">Water Source</TableHead>
+                    <TableHead className="whitespace-nowrap">Total Waste (tonnes)</TableHead>
+                    <TableHead className="whitespace-nowrap">Recycled Waste (tonnes)</TableHead>
+                    <TableHead className="whitespace-nowrap">Landfill Waste (tonnes)</TableHead>
+                    <TableHead className="whitespace-nowrap">Data Source</TableHead>
+                    <TableHead className="whitespace-nowrap">Coverage (%)</TableHead>
+                    <TableHead className="whitespace-nowrap">Green Building Cert.</TableHead>
+                    <TableHead className="whitespace-nowrap">Cert. Expiry Date</TableHead>
+                    <TableHead className="whitespace-nowrap">Framework</TableHead>
+                    <TableHead className="whitespace-nowrap text-right">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -340,16 +415,33 @@ const MappingPreview = ({ isComplete }: MappingPreviewProps) => {
                             {getStatusIcon(mapping.status)}
                           </div>
                         </TableCell>
-                        <TableCell className="font-medium">{mapping.sourceField}</TableCell>
-                        <TableCell className="text-sm">
-                          <span className={`${mapping.status === 'error' ? 'text-destructive' : 'text-warning'}`}>
+                        <TableCell className="whitespace-nowrap">{mapping.assetId}</TableCell>
+                        <TableCell className="whitespace-nowrap">{mapping.assetName}</TableCell>
+                        <TableCell className="whitespace-nowrap">{mapping.country}</TableCell>
+                        <TableCell className="whitespace-nowrap text-sm">
+                          <span className={`${mapping.status === 'error' ? 'text-destructive' : 'text-amber-600'}`}>
                             {mapping.statusMessage}
                           </span>
                         </TableCell>
-                        <TableCell>{mapping.targetField}</TableCell>
+                        <TableCell className="whitespace-nowrap">{mapping.month}</TableCell>
+                        <TableCell className="whitespace-nowrap">{mapping.grossInternalArea}</TableCell>
+                        <TableCell className="whitespace-nowrap">{mapping.electricityConsumption}</TableCell>
+                        <TableCell className="whitespace-nowrap">{mapping.fuelConsumption}</TableCell>
+                        <TableCell className="whitespace-nowrap">{mapping.districtHeating}</TableCell>
+                        <TableCell className="whitespace-nowrap">{mapping.renewableEnergy}</TableCell>
+                        <TableCell className="whitespace-nowrap">{mapping.scope1Emissions}</TableCell>
+                        <TableCell className="whitespace-nowrap">{mapping.scope2Emissions}</TableCell>
+                        <TableCell className="whitespace-nowrap">{mapping.waterConsumption}</TableCell>
+                        <TableCell className="whitespace-nowrap">{mapping.waterSourceType}</TableCell>
+                        <TableCell className="whitespace-nowrap">{mapping.totalWaste}</TableCell>
+                        <TableCell className="whitespace-nowrap">{mapping.recycledWaste}</TableCell>
+                        <TableCell className="whitespace-nowrap">{mapping.landfillWaste}</TableCell>
+                        <TableCell className="whitespace-nowrap">{mapping.dataSource}</TableCell>
+                        <TableCell className="whitespace-nowrap">{mapping.dataCoverage}</TableCell>
+                        <TableCell className="whitespace-nowrap">{mapping.greenBuildingCert}</TableCell>
+                        <TableCell className="whitespace-nowrap">{mapping.certificationExpiry}</TableCell>
                         <TableCell>{getFrameworkBadge(mapping.frameworkType)}</TableCell>
-                        <TableCell>{mapping.targetCategory}</TableCell>
-                        <TableCell className="text-right">
+                        <TableCell className="text-right whitespace-nowrap">
                           <Button variant="outline" size="sm">Fix</Button>
                         </TableCell>
                       </TableRow>
@@ -365,3 +457,4 @@ const MappingPreview = ({ isComplete }: MappingPreviewProps) => {
 };
 
 export default MappingPreview;
+
