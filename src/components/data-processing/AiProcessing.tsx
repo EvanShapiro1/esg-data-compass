@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Braces, Cable, FileSearch, LineChart, Server, Bolt, CloudSnow, Droplet } from "lucide-react";
+import { Braces, Cable, FileSearch, LineChart, Server } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 
 interface ProcessingStep {
@@ -35,7 +35,7 @@ const AiProcessing = ({ files, isProcessing, currentStep, processingProgress }: 
     {
       id: 'analyze',
       title: 'Data Analysis',
-      description: 'Analyzing electricity, GHG emissions, and water metrics',
+      description: 'Analyzing and categorizing ESG metrics',
       icon: <LineChart className="h-5 w-5" />,
       progress: currentStep >= 1 ? (currentStep === 1 ? processingProgress : 100) : 0,
       status: 
@@ -45,12 +45,8 @@ const AiProcessing = ({ files, isProcessing, currentStep, processingProgress }: 
     {
       id: 'schema',
       title: 'Schema Mapping',
-      description: 'Mapping to GRESB and SFDR frameworks',
-      icon: <div className="flex items-center gap-1">
-        <Bolt className="h-4 w-4" />
-        <CloudSnow className="h-4 w-4" />
-        <Droplet className="h-4 w-4" />
-      </div>,
+      description: 'Mapping to GRESB schema',
+      icon: <Braces className="h-5 w-5" />,
       progress: currentStep >= 2 ? (currentStep === 2 ? processingProgress : 100) : 0,
       status: 
         currentStep > 2 ? 'complete' : 
@@ -59,7 +55,7 @@ const AiProcessing = ({ files, isProcessing, currentStep, processingProgress }: 
     {
       id: 'validation',
       title: 'Data Validation',
-      description: 'Validating against framework requirements',
+      description: 'Validating against GRESB requirements',
       icon: <Cable className="h-5 w-5" />,
       progress: currentStep >= 3 ? (currentStep === 3 ? processingProgress : 100) : 0,
       status: 
@@ -94,7 +90,7 @@ const AiProcessing = ({ files, isProcessing, currentStep, processingProgress }: 
         </CardTitle>
         <CardDescription>
           {isProcessing 
-            ? `Processing ${files.length} file${files.length !== 1 ? 's' : ''} for electricity, GHG emissions, and water metrics`
+            ? `Processing ${files.length} file${files.length !== 1 ? 's' : ''} with AI-powered data extraction`
             : 'Ready to process your ESG data files'}
         </CardDescription>
       </CardHeader>
@@ -122,7 +118,7 @@ const AiProcessing = ({ files, isProcessing, currentStep, processingProgress }: 
 
           {isProcessing && currentStep === 3 && processingProgress > 90 && (
             <div className="text-sm text-success font-medium mt-4">
-              Almost complete! Finalizing your framework mapping...
+              Almost complete! Finalizing your GRESB mapping...
             </div>
           )}
         </div>
